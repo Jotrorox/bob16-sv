@@ -121,10 +121,11 @@ make clean
 
 ### Assembling Custom Programs
 
-The zero-dependency assembler translates `.basm` files to 16-bit hex images suitable for `$readmemh`:
+The zero-dependency C assembler translates `.basm` files to 16-bit hex images suitable for `$readmemh`:
 
 ```sh
-python3 tools/assemble.py programs/hello.basm -o programs/hello.hex --words 4096
+make tools/assemble
+./tools/assemble programs/hello.basm -o programs/hello.hex --words 4096
 ```
 
 ---
@@ -156,5 +157,5 @@ bob16-sv/
 │   ├── echo.basm        # Interactive serial echo demo
 │   └── hello.basm       # Upstream "bob" demo
 └── tools/
-    └── assemble.py      # Standalone BOB-16 assembler
+    └── assemble.c       # Standalone BOB-16 assembler in C
 ```

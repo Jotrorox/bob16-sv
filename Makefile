@@ -1,4 +1,6 @@
-PYTHON   ?= python3
+CC       ?= cc
+CFLAGS   ?= -O2 -Wall -Wextra
+ASSEMBLE ?= tools/assemble
 IVERILOG ?= iverilog
 VVP      ?= vvp
 YOSYS    ?= yosys
@@ -21,8 +23,8 @@ BOB16_SIM_MAKEFILE := $(lastword $(MAKEFILE_LIST))
 
 all: $(PROGRAMS)
 
-programs/%.hex: programs/%.basm tools/assemble.py
-	$(PYTHON) tools/assemble.py $< -o $@ --words 4096
+programs/%.hex: programs/%.basm tools/assemble
+	$(ASSEMBLE) $< -o $@ --words 4096
 
 sim: test
 
@@ -33,12 +35,12 @@ $(TESTS): all
 	$(IVERILOG) -g2012 -s tb_$@ -o build/$@.vvp $(SRCS) tb/tb_$@.sv
 	$(VVP) build/$@.vvp
 
-run: $(BOB16_SIM_BIN) $(PROG)
+run: $(BOB16_SIM_BIN) $(PROG) tools/assemble
 	@set -eu; \
 	hex="$(PROG)"; \
 	case "$(PROG)" in \
 	    *.basm) \
-	        $(PYTHON) tools/assemble.py "$(PROG)" \
+	        $(ASSEMBLE) "$(PROG)" \
 	            -o "$(BOB16_SIM_HEX)" --words 4096 >&2; \
 	        hex="$(BOB16_SIM_HEX)" ;; \
 	    *.hex) ;; \
@@ -55,6 +57,9 @@ $(BOB16_SIM_BIN): tb/tb_sim.sv rtl/files.f $(wildcard rtl/*.sv rtl/*.svh) $(BOB1
 synth:
 	@mkdir -p build
 	$(YOSYS) -l build/yosys-core.log -p 'read_verilog -sv rtl/bob16_alu.sv rtl/bob16_core.sv; synth -top bob16_core; check; stat'
+
+tools/assemble: tools/assemble.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
 	rm -rf build $(PROGRAMS)
