@@ -1,0 +1,9 @@
+build/
+*.hex
+__pycache__/
+*.pyc
+*.vcd
+*.vvp
+*.log
+*.jou
+.Xil/

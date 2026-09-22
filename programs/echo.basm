@@ -1,0 +1,9 @@
+; Send up to 31 bytes terminated by LF over the UART, then echo and halt.
+; PUTS already appends LF by default. Set PUTS_NEWLINE=0 to avoid a second LF.
+lea r0 buffer
+and r1 0
+add r1 32
+trap 3
+trap 2
+trap 0
+buffer: .space 32
