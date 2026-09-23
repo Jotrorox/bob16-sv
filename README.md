@@ -1,6 +1,6 @@
 # BOB-16 — SystemVerilog FPGA Implementation
 
-A clean, multicycle hardware implementation of the [BOB-16 architecture](https://github.com/somerandomviolinkid/bob16) (created by **misterbob**) in SystemVerilog. Includes an SoC wrapper, UART controller, C assembler, and testbenches.
+A clean, multicycle hardware implementation of the [BOB-16 architecture](https://github.com/somerandomviolinkid/bob16) (created by **misterbob**) in SystemVerilog. Includes an SoC wrapper, UART controller, Python assembler, and testbenches.
 
 ---
 
@@ -48,7 +48,7 @@ BOB-16 is a 16-bit word-addressed load/store architecture:
 
 ### Prerequisites
 
-- C compiler (`cc`, `gcc`, or `clang`) and `make`
+- Python 3 and `make`
 - Icarus Verilog (`iverilog`, `vvp`)
 - *(Optional)* Yosys (synthesis check)
 
@@ -74,6 +74,5 @@ make synth
 Assemble `.basm` source files to 16-bit hex images for simulation or block RAM initialization:
 
 ```sh
-make tools/assemble
-./tools/assemble programs/hello.basm -o programs/hello.hex [--words 4096]
+python3 tools/bob16_asm.py programs/hello.basm -o programs/hello.hex [--words 4096]
 ```
